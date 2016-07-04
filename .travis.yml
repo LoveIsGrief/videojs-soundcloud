@@ -6,12 +6,7 @@ node_js:
 
 # Use Chromium instead of Chrome
 # Since it's easier to install
-# env: CHROME_BIN=chromium-browser
-
-addons:
-  apt:
-    packages:
-      - google-chrome-stable
+env: CHROME_BIN=chromium-browser
 
 before_install:
     - sudo apt-get update -qq
