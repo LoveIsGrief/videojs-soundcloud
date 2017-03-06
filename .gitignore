@@ -6,3 +6,6 @@ example/*.html
 
 #npm stuff
 npm-debug.log
+
+# IDEs
+.idea
