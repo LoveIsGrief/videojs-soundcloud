@@ -44,7 +44,7 @@ module.exports = (grunt) ->
 		watch:
 			sources:
 				files: ["src/*.coffee", "example/*.jade"]
-				tasks: ["coffee_jshint", "compile"]
+				tasks: ["compile", "example"]
 				options: livereload: true
 
 		coffee:
@@ -106,6 +106,7 @@ module.exports = (grunt) ->
 
 	#
 	grunt.registerTask "compile", [
+					"coffee_jshint"
 					"coffee"
 					"uglify"
 				]
