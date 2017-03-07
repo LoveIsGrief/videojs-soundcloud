@@ -15,16 +15,20 @@ html
 				source = document.getElementById("source").value
 				console.debug("Setting new source: " + source);
 				videojs("myAudio", {
-					"techOrder": ["soundcloud"],
-					//- "sources": [source],
+						techOrder: ["Soundcloud"],
+					// "sources": [source],
 					}, function(){}
-				).src(source);
+				).src({
+					src: source,
+					type: "audio/soundcloud"
+				});
 
 			}
+			window.addEventListener("load", updateSource)
 
 		title videojs-souncloud test
 
-	body(onload="updateSource()")
+	body
 		h1 videojs-souncloud example
 
 		form(
