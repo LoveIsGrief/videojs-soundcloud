@@ -17,6 +17,9 @@ addScriptTag = (scriptUrl)->
 	headTag.parentNode.appendChild tag
 
 class Soundcloud extends Tech
+
+	@URL_PREFIX = "https://w.soundcloud.com/player/?url="
+
 	###
 	Soundcloud Tech - Wrapper for Soundcloud Media API
 	API SC.Widget documentation: http://developers.soundcloud.com/docs/api/html5-widget
@@ -29,7 +32,6 @@ class Soundcloud extends Tech
 	constructor: (options, ready)->
 		console.debug "initializing Soundcloud tech"
 
-		super options, ready
 
 		# Init attributes
 
@@ -46,11 +48,9 @@ class Soundcloud extends Tech
 		else if "object" == typeof options.source
 			@soundcloudSource = options.source.src
 
-		# Create the iframe for the soundcloud API
-
 
 		# Make autoplay work for iOS
-		if @options().autoplay
+		if options.autoplay
 			@playOnReady = true
 
 		# Called by @triggerReady once the player is ready for business
@@ -61,6 +61,7 @@ class Soundcloud extends Tech
 			@trigger "loadstart"
 
 	#		console.debug "loading soundcloud"
+		super options, ready
 		@loadSoundcloud()
 
 	_getWidgetId: ->
@@ -81,7 +82,7 @@ class Soundcloud extends Tech
 				webkitAllowFullScreen: "true"
 				mozallowfullscreen: "true"
 				allowFullScreen: "true"
-				src: "https://w.soundcloud.com/player/?url=#{@soundcloudSource}"
+				src: "#{Soundcloud.URL_PREFIX}#{@soundcloudSource}"
 			@scWidgetElement.style.visibility = "hidden"
 		@scWidgetElement
 #@player_.el().classList.add "backgroundContainer"
@@ -269,7 +270,7 @@ Soundcloud::loadSoundcloud = ->
 		console.debug "simply initializing the widget"
 		@initWidget()
 	else
-		# Load the Soundcloud API if it is the first Soundcloud video
+		# Load the Soundcloud API if it is the first Soundcloud audio
 		if not Soundcloud.apiLoading
 			console.debug "loading soundcloud api"
 
@@ -292,7 +293,7 @@ and which will react to events.
 Soundcloud::initWidget = ->
 	console.debug "Initializing the widget"
 
-	@soundcloudPlayer = SC.Widget @scWidgetId
+	@soundcloudPlayer = SC.Widget @el_
 	console.debug "created widget"
 	@soundcloudPlayer.bind SC.Widget.Events.READY, =>
 		@onReady()
