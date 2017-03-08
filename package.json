@@ -1,7 +1,7 @@
 {
   "name": "video.js-soundcloud",
   "description": "A tech for video.js to play soundcloud links",
-  "version": "1.0.1",
+  "version": "2.0.0-unstable.2017.03.08",
   "copyright": "See license @ https://github.com/LoveIsGrief/videojs-soundcloud/blob/master/LICENSE",
   "keywords": [
     "videojs",
