@@ -7,6 +7,7 @@ spyOnAllClassFunctions = (o)->
 	Object.keys(o.prototype).forEach (funcName)->
 		spyOn(o.prototype, funcName).and.callThrough()
 
+videojs = window.videojs
 
 describe "videojs-soundcloud plugin", ->
 
@@ -67,7 +68,7 @@ describe "videojs-soundcloud plugin", ->
 	It should trigger the "newSource" event
 
 	The input is the same as vjs.Player.src (that's what's called)
-	Which calls @see videojs.Soundcloud::src
+	Which calls @see Soundcloud::src
 
 	@param newSource [Object] { type: <String>, src: <String>}
 	@param newSource [String] The URL
@@ -88,7 +89,7 @@ describe "videojs-soundcloud plugin", ->
 
 	beforeEach ->
 		console.debug "master beforeEach"
-		@plugin = videojs.Soundcloud
+		@plugin = Soundcloud
 		@pluginPrototype = @plugin.prototype
 		spyOnAllClassFunctions @plugin
 		@videoTagId = "myStuff"
