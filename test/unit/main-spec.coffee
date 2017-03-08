@@ -87,6 +87,9 @@ describe "videojs-soundcloud plugin", ->
 			console.debug "changing source to #{newSourceString}"
 			@player.src newSource
 
+	# TODO add test for posterchange
+	# Check the PosterImage component which is used
+
 	beforeEach ->
 		console.debug "master beforeEach"
 		@plugin = Soundcloud

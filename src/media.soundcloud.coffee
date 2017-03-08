@@ -40,6 +40,7 @@ class Soundcloud extends Tech
 		@currentPositionSeconds = 0
 		@loadPercentageDecimal = 0
 		@paused_ = true
+		@poster_ = null
 
 		@soundcloudSource = null
 		if "string" == typeof options.source
@@ -125,20 +126,28 @@ Soundcloud::src = (src)->
 Soundcloud::currentSrc = ->
 	@src()
 
+###
+A getter for the poster
+###
+Soundcloud::poster = ->
+	@poster_
+
+###
+Grabs the poster from soundcloud
+ASYNC
+###
 Soundcloud::updatePoster = ->
 	try
 	# Get artwork for the sound
-		@soundcloudPlayer.getSounds (sounds) =>
-			console.debug "got sounds"
-			return if sounds.length != 1
+		@soundcloudPlayer.getCurrentSound (sound) =>
+			console.debug "got sound", sound
+			return if not (sound and sound.artwork_url)
 
-			sound = sounds[0]
-			return if  not sound.artwork_url
 			# Take the larger version as described at https://developers.soundcloud.com/docs/api/reference#artwork_url
 			posterUrl = sound.artwork_url.replace "large.jpg", "t500x500.jpg"
 			console.debug "Setting poster to #{posterUrl}"
-			@player_.el().style.backgroundImage = "url('#{posterUrl}')"
-	#@player_.poster(posterUrl)
+			@poster_ = posterUrl
+			@trigger "posterchange"
 	catch e
 		console.debug "Could not update poster"
 
