@@ -100,16 +100,25 @@ describe "videojs-soundcloud plugin", ->
 		# The audio we wanna play
 		@source = "https://soundcloud.com/vaughan-1-1/this-is-what-crazy-looks-like"
 
-	afterEach ->
-		console.debug "master afterEach"
-		player = videojs.players[@videoTagId]
-		player.dispose() if player
+	# Has to be done asynchronously otherwise
+	# we will dispose of the player before the test is over
+	# and videojs is still running through it's "ready" trigger
+	afterEach (done)->
+		setTimeout =>
+			console.debug "master afterEach"
+			player = videojs.players[@videoTagId]
+			player.dispose() if player
 
-		expect(videojs.players[@videoTagId]).toBeFalsy()
+			expect(document.getElementsByTagName("iframe").length).toEqual(0)
+			expect(videojs.players[@videoTagId]).toBeFalsy()
+			done()
+		, 1
 
 	describe "created with html video>source" , ->
 
 		beforeEach ->
+			console.debug("before each", @player)
+			expect(@player).toBeUndefined()
 			@vFromTag = window.__html__['test/ressources/videojs_from_tag.html']
 			document.body.innerHTML = @vFromTag
 			expect(document.getElementById(@videoTagId)).not.toBeNull()
