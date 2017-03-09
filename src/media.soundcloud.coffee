@@ -103,9 +103,9 @@ Soundcloud::src = (src)->
 	console.debug "load a new source(#{src})"
 	@soundcloudPlayer.load src, callback: =>
 		@soundcloudSource = src
-		@onReady()
-		console.debug "trigger 'newSource' from #{src}"
-		@player_.trigger "newSource"
+		if not @ready_
+			@onReady()
+		@trigger "loadstart"
 
 
 Soundcloud::currentSrc = ->
@@ -462,7 +462,7 @@ class SoundcloudSourceHandler
 		The options passed to the tech
 	###
 	@canPlaySource: (source, options)->
-		ret = if @canPlayType(source.type) and @isSoundcloudUrl(source.src)
+		ret = if @canPlayType(source.type) or @isSoundcloudUrl(source.src)
 			"probably"
 		else
 			''
@@ -472,8 +472,10 @@ class SoundcloudSourceHandler
 	@canHandleSource: (source, options)->
 		return @canPlaySource source, options
 
+	# Chainable
 	@handleSource: (source, tech, options)->
 		tech.src source.src
+		@
 
 
 # mix in SourceHandler pattern

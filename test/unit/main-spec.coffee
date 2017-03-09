@@ -80,12 +80,14 @@ describe "videojs-soundcloud plugin", ->
 			else newSource
 
 		(done) ->
-			@player.one "newSource", =>
-				console.debug "changed source for to #{newSourceString}"
-				expect(@player.src()).toEqual newSourceString
-				done()
-			console.debug "changing source to #{newSourceString}"
-			@player.src newSource
+			@player.one "loadstart", =>
+				# The second load should be the new source
+				@player.one "loadstart", =>
+					console.debug "changed source for to #{newSource}"
+					expect(@player.src()).toEqual newSourceString
+					done()
+				console.debug "changing source to #{newSource}"
+				@player.src newSource
 
 	# TODO add test for posterchange
 	# Check the PosterImage component which is used
