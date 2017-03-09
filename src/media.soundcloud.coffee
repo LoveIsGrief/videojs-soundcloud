@@ -31,7 +31,7 @@ class Soundcloud extends Tech
 	###
 	constructor: (options, ready)->
 		console.debug "initializing Soundcloud tech"
-
+		super options, ready
 
 		# Init attributes
 
@@ -49,11 +49,6 @@ class Soundcloud extends Tech
 		else if "object" == typeof options.source
 			@soundcloudSource = options.source.src
 
-
-		# Make autoplay work for iOS
-		if options.autoplay
-			@playOnReady = true
-
 		# Called by @triggerReady once the player is ready for business
 		@ready =>
 			# TODO check if this is still necessary
@@ -61,20 +56,12 @@ class Soundcloud extends Tech
 			# Trigger to enable controls
 			@trigger "loadstart"
 
-	#		console.debug "loading soundcloud"
-		super options, ready
+		@scWidgetElement.id = @scWidgetId = "soundcloud_api_#{Date.now()}"
+		@scWidgetElement.src = "#{Soundcloud.URL_PREFIX}#{@soundcloudSource}"
 		@loadSoundcloud()
 
-	_getWidgetId: ->
-		if @scWidgetId
-			@scWidgetId
-		else
-			@scWidgetId = "#{@id()}_soundcloud_api_#{Date.now()}"
-
 	createEl: ->
-		if !@scWidgetElement
-			@scWidgetElement = super 'iframe',
-				id: @_getWidgetId()
+		@scWidgetElement = super 'iframe',
 			#			className: 'vjs-tech'
 				scrolling: 'no'
 				marginWidth: 0
@@ -83,8 +70,7 @@ class Soundcloud extends Tech
 				webkitAllowFullScreen: "true"
 				mozallowfullscreen: "true"
 				allowFullScreen: "true"
-				src: "#{Soundcloud.URL_PREFIX}#{@soundcloudSource}"
-			@scWidgetElement.style.visibility = "hidden"
+		@scWidgetElement.style.visibility = "hidden"
 		@scWidgetElement
 #@player_.el().classList.add "backgroundContainer"
 
@@ -96,9 +82,8 @@ Soundcloud::dispose = ->
 	if @scWidgetElement
 		@scWidgetElement.parentNode.removeChild @scWidgetElement
 		console.debug "Removed widget Element"
+		delete @scWidgetElement
 		console.debug @scWidgetElement
-	#	@player_.el().classList.remove "backgroundContainer"
-	#	@player_.el().style.backgroundImage = ""
 	console.debug "removed CSS"
 	delete @soundcloudPlayer if @soundcloudPlayer
 
@@ -276,8 +261,11 @@ Soundcloud::loadSoundcloud = ->
 
 	# Prepare everything for playing
 	if Soundcloud.apiReady and not @soundcloudPlayer
-		console.debug "simply initializing the widget"
-		@initWidget()
+		# Wait for the element to be inserted into the player
+		setTimeout =>
+			console.debug "simply initializing the widget"
+			@initWidget()
+		, 1
 	else
 		# Load the Soundcloud API if it is the first Soundcloud audio
 		if not Soundcloud.apiLoading
@@ -363,14 +351,9 @@ Soundcloud::onReady = ->
 	#@soundcloudPlayer.play()
 	#@soundcloudPlayer.pause()
 
+	console.log "finished onReady"
 	@triggerReady()
-	# Play right away if we clicked before ready
-	try
-		@soundcloudPlayer.play() if @playOnReady
-	catch e
-		console.debug "could not play onready"
 
-	console.debug "finished onReady"
 
 
 ###
