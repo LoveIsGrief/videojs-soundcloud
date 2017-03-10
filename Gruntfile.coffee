@@ -120,8 +120,8 @@ module.exports = (grunt) ->
 
 	# Runs tests on the dev source and then compiled source
 	grunt.registerTask "test", [
-					"karma:single"
 					"compile"
+					"karma:single"
 					"karma:singleProduction"
 				]
 
