@@ -462,7 +462,7 @@ class SoundcloudSourceHandler
 		The options passed to the tech
 	###
 	@canPlaySource: (source, options)->
-		ret = if @canPlayType(source.type) or @isSoundcloudUrl(source.src)
+		ret = if @canPlayType(source.type) or @isSoundcloudUrl(source.src || source)
 			"probably"
 		else
 			''

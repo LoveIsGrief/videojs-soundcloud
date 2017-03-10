@@ -83,7 +83,7 @@ describe "videojs-soundcloud plugin", ->
 			@player.one "loadstart", =>
 				# The second load should be the new source
 				@player.one "loadstart", =>
-					console.debug "changed source for to #{newSource}"
+					console.debug "changed source for to", newSource
 					expect(@player.src()).toEqual newSourceString
 					done()
 				console.debug "changing source to #{newSource}"
@@ -157,7 +157,7 @@ describe "videojs-soundcloud plugin", ->
 			document.body.innerHTML = @vFromScript
 			expect(document.getElementById @videoTagId).not.toBeNull()
 			@player = videojs @videoTagId, {
-				"techOrder": ["soundcloud"]
+				"techOrder": ["Soundcloud"]
 				"sources": [@source]
 				}
 
@@ -176,7 +176,7 @@ describe "videojs-soundcloud plugin", ->
 
 		### To use with @see changeSourceTest ###
 		secondSource = {
-			src: "https://soundcloud.com/andrewclarke201/under-the-sun-out-now"
+			src: "https://soundcloud.com/nordemusic/missing-you-ft-lucas-nord"
 			type: "audio/soundcloud"
 		}
 
