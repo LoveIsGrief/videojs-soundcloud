@@ -89,6 +89,7 @@ module.exports = (grunt) ->
 					"document"
 					"module"
 					"console"
+					"setTimeout"
 				]
 			source:
 				src: "src/**/*.coffee"
