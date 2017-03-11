@@ -25,6 +25,7 @@ before_install:
     # Mke sure
     - sudo apt-get update -qq
     # Install the browsers
+    - sudo apt-get purge -y firefox
     - sudo apt-get install -y chromium-browser firefox google-chrome-stable
     # Setup xvfb for browsers
     - export DISPLAY=:99.0
