@@ -24,7 +24,7 @@ before_install:
     # Mke sure
     - sudo apt-get update -qq
     # Install the browsers
-    - sudo apt-get install -y chromium-browser opera firefox google-chrome-stable
+    - sudo apt-get install -y chromium-browser opera-stable firefox google-chrome-stable
     # Setup xvfb for browsers
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start

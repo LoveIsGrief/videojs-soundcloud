@@ -11,6 +11,7 @@ module.exports = (config) ->
             "Chrome"
             "Chromium"
             "Firefox"
+            "Opera"
           ]
   config.set
 
