@@ -44,7 +44,7 @@ module.exports = (grunt) ->
 		watch:
 			sources:
 				files: ["src/*.coffee", "example/*.jade"]
-				tasks: ["coffee_jshint", "compile"]
+				tasks: ["compile", "example"]
 				options: livereload: true
 
 		coffee:
@@ -89,6 +89,7 @@ module.exports = (grunt) ->
 					"document"
 					"module"
 					"console"
+					"setTimeout"
 				]
 			source:
 				src: "src/**/*.coffee"
@@ -106,6 +107,7 @@ module.exports = (grunt) ->
 
 	#
 	grunt.registerTask "compile", [
+					"coffee_jshint"
 					"coffee"
 					"uglify"
 				]
@@ -118,8 +120,8 @@ module.exports = (grunt) ->
 
 	# Runs tests on the dev source and then compiled source
 	grunt.registerTask "test", [
-					"karma:single"
 					"compile"
+					"karma:single"
 					"karma:singleProduction"
 				]
 

@@ -2,9 +2,9 @@ html
 	head
 
 		//- !-- Mandatory videojs include! --
-		script(src="../bower_components/videojs/dist/video-js/video.js")
-		link(href="../bower_components/videojs/dist/video-js/video-js.css" rel="stylesheet")
-		script(src="../dist/media.soundcloud.js")
+		link(href="../bower_components/video.js/dist/video-js.css" rel="stylesheet")
+		script(src="../bower_components/video.js/dist/video.js")
+		script(src="../dist/media.soundcloud.dev.js")
 
 		//- To make livereload work
 		script(src="http://localhost:35729/livereload.js")
@@ -15,16 +15,20 @@ html
 				source = document.getElementById("source").value
 				console.debug("Setting new source: " + source);
 				videojs("myAudio", {
-					"techOrder": ["soundcloud"],
-					//- "sources": [source],
+						techOrder: ["Soundcloud"],
+					// "sources": [source],
 					}, function(){}
-				).src(source);
+				).src({
+					src: source,
+					type: "audio/soundcloud"
+				});
 
 			}
+			window.addEventListener("load", updateSource)
 
 		title videojs-souncloud test
 
-	body(onload="updateSource()")
+	body
 		h1 videojs-souncloud example
 
 		form(

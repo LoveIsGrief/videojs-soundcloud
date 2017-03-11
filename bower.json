@@ -1,6 +1,6 @@
 {
   "name": "videojs-soundcloud",
-  "version": "1.0.1",
+  "version": "2.0.0-unstable",
   "homepage": "https://github.com/LoveIsGrief/videojs-soundcloud",
   "authors": [
     "LoveIsGrief <LoveIsGrief@users.noreply.github.com>"
@@ -24,6 +24,6 @@
     "tests"
   ],
   "dependencies": {
-    "videojs": "~4.12.1"
+    "video.js": "videojs#^5.18.3"
   }
 }

@@ -7,6 +7,7 @@ spyOnAllClassFunctions = (o)->
 	Object.keys(o.prototype).forEach (funcName)->
 		spyOn(o.prototype, funcName).and.callThrough()
 
+videojs = window.videojs
 
 describe "videojs-soundcloud plugin", ->
 
@@ -67,7 +68,7 @@ describe "videojs-soundcloud plugin", ->
 	It should trigger the "newSource" event
 
 	The input is the same as vjs.Player.src (that's what's called)
-	Which calls @see videojs.Soundcloud::src
+	Which calls @see Soundcloud::src
 
 	@param newSource [Object] { type: <String>, src: <String>}
 	@param newSource [String] The URL
@@ -79,16 +80,21 @@ describe "videojs-soundcloud plugin", ->
 			else newSource
 
 		(done) ->
-			@player.one "newSource", =>
-				console.debug "changed source for to #{newSourceString}"
-				expect(@player.src()).toEqual newSourceString
-				done()
-			console.debug "changing source to #{newSourceString}"
-			@player.src newSource
+			@player.one "loadstart", =>
+				# The second load should be the new source
+				@player.one "loadstart", =>
+					console.debug "changed source for to", newSource
+					expect(@player.src()).toEqual newSourceString
+					done()
+				console.debug "changing source to #{newSource}"
+				@player.src newSource
+
+	# TODO add test for posterchange
+	# Check the PosterImage component which is used
 
 	beforeEach ->
 		console.debug "master beforeEach"
-		@plugin = videojs.Soundcloud
+		@plugin = Soundcloud
 		@pluginPrototype = @plugin.prototype
 		spyOnAllClassFunctions @plugin
 		@videoTagId = "myStuff"
@@ -96,16 +102,25 @@ describe "videojs-soundcloud plugin", ->
 		# The audio we wanna play
 		@source = "https://soundcloud.com/vaughan-1-1/this-is-what-crazy-looks-like"
 
-	afterEach ->
-		console.debug "master afterEach"
-		player = videojs.players[@videoTagId]
-		player.dispose() if player
+	# Has to be done asynchronously otherwise
+	# we will dispose of the player before the test is over
+	# and videojs is still running through it's "ready" trigger
+	afterEach (done)->
+		setTimeout =>
+			console.debug "master afterEach"
+			player = videojs.players[@videoTagId]
+			player.dispose() if player
 
-		expect(videojs.players[@videoTagId]).toBeFalsy()
+			expect(document.getElementsByTagName("iframe").length).toEqual(0)
+			expect(videojs.players[@videoTagId]).toBeFalsy()
+			done()
+		, 1
 
 	describe "created with html video>source" , ->
 
 		beforeEach ->
+			console.debug("before each", @player)
+			expect(@player).toBeUndefined()
 			@vFromTag = window.__html__['test/ressources/videojs_from_tag.html']
 			document.body.innerHTML = @vFromTag
 			expect(document.getElementById(@videoTagId)).not.toBeNull()
@@ -142,7 +157,7 @@ describe "videojs-soundcloud plugin", ->
 			document.body.innerHTML = @vFromScript
 			expect(document.getElementById @videoTagId).not.toBeNull()
 			@player = videojs @videoTagId, {
-				"techOrder": ["soundcloud"]
+				"techOrder": ["Soundcloud"]
 				"sources": [@source]
 				}
 
@@ -161,7 +176,7 @@ describe "videojs-soundcloud plugin", ->
 
 		### To use with @see changeSourceTest ###
 		secondSource = {
-			src: "https://soundcloud.com/andrewclarke201/under-the-sun-out-now"
+			src: "https://soundcloud.com/nordemusic/missing-you-ft-lucas-nord"
 			type: "audio/soundcloud"
 		}
 
