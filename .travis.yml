@@ -28,11 +28,19 @@ before_install:
     # Install the browsers
     - echo $PATH
     - env
-    - sudo ln -s $(which firefox-trunk) /usr/bin/firefox
+    - firefox -version
+    - which firefox
     - sudo apt-get install -y chromium-browser firefox-trunk google-chrome-stable
+    - sudo ln -s $(which firefox-trunk) /usr/bin/firefox
+    - FF=$(which firefox)
+    - echo $FF
+    - sudo rm $FF
+    - sudo ln -s $(which firefox-trunk) $FF
     # Setup xvfb for browsers
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
     # Install grunt and bower globally
     - npm install -g grunt-cli bower
+    - which firefox
+    - firefox -version
 
