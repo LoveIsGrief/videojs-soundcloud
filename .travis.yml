@@ -27,11 +27,15 @@ before_install:
     - sudo apt-get update -qq
     # Install the browsers
     - sudo apt-get install -y chromium-browser google-chrome-stable
-    # Install what's needed to play mp4s with firefox
-    - sudo apt-get install ubuntu-restricted-extras
     # Setup xvfb for browsers
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
     # Install grunt and bower globally
     - npm install -g grunt-cli bower
+    # Install what's needed to play mp4s and audio with firefox
+    - sudo apt-get install -y ubuntu-restricted-addons pulseaudio
+    # Configure pulseaudio to run properly
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1214809
+    - pulseaudio --start --daemonize --fail
+    - pactl load-module module-null-sink
 
