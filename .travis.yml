@@ -15,7 +15,7 @@ before_install:
     # Add repos
     - sudo apt-add-repository "deb http://deb.opera.com/opera/ stable non-free"
     - sudo apt-add-repository "deb http://dl.google.com/linux/chrome/deb/ stable main"
-    - sudo apt-add-repository "deb http://ppa.launchpad.net/ubuntu-mozilla-daily/ppa/ubuntu trusty main"
+    - sudo add-apt-repository ppa:ubuntu-mozilla-daily/ppa
     # Remove "deb-src" repos added from apt-add-repository, because it doesn't exist online
     - sudo sed -i s/deb-src.*opera.*//g /etc/apt/sources.list
     - sudo sed -i s/deb-src.*google.*//g /etc/apt/sources.list
