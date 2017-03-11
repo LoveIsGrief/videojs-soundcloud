@@ -29,6 +29,8 @@ addScriptTag = function(scriptUrl) {
 Soundcloud = (function(superClass) {
   extend(Soundcloud, superClass);
 
+  Soundcloud.URL_PREFIX = "https://w.soundcloud.com/player/?url=";
+
 
   /*
   	Soundcloud Tech - Wrapper for Soundcloud Media API
@@ -48,6 +50,7 @@ Soundcloud = (function(superClass) {
     this.currentPositionSeconds = 0;
     this.loadPercentageDecimal = 0;
     this.paused_ = true;
+    this.poster_ = null;
     this.soundcloudSource = null;
     if ("string" === typeof options.source) {
       console.debug("given string source: " + options.source);
@@ -55,41 +58,28 @@ Soundcloud = (function(superClass) {
     } else if ("object" === typeof options.source) {
       this.soundcloudSource = options.source.src;
     }
-    if (this.options().autoplay) {
-      this.playOnReady = true;
-    }
     this.ready((function(_this) {
       return function() {
         console.debug("ready to play");
         return _this.trigger("loadstart");
       };
     })(this));
+    this.scWidgetElement.id = this.scWidgetId = "soundcloud_api_" + (Date.now());
+    this.scWidgetElement.src = "" + Soundcloud.URL_PREFIX + this.soundcloudSource;
     this.loadSoundcloud();
   }
 
-  Soundcloud.prototype._getWidgetId = function() {
-    if (this.scWidgetId) {
-      return this.scWidgetId;
-    } else {
-      return this.scWidgetId = (this.id()) + "_soundcloud_api_" + (Date.now());
-    }
-  };
-
   Soundcloud.prototype.createEl = function() {
-    if (!this.scWidgetElement) {
-      this.scWidgetElement = Soundcloud.__super__.createEl.call(this, 'iframe', {
-        id: this._getWidgetId(),
-        scrolling: 'no',
-        marginWidth: 0,
-        marginHeight: 0,
-        frameBorder: 0,
-        webkitAllowFullScreen: "true",
-        mozallowfullscreen: "true",
-        allowFullScreen: "true",
-        src: "https://w.soundcloud.com/player/?url=" + this.soundcloudSource
-      });
-      this.scWidgetElement.style.visibility = "hidden";
-    }
+    this.scWidgetElement = Soundcloud.__super__.createEl.call(this, 'iframe', {
+      scrolling: 'no',
+      marginWidth: 0,
+      marginHeight: 0,
+      frameBorder: 0,
+      webkitAllowFullScreen: "true",
+      mozallowfullscreen: "true",
+      allowFullScreen: "true"
+    });
+    this.scWidgetElement.style.visibility = "hidden";
     return this.scWidgetElement;
   };
 
@@ -107,6 +97,7 @@ Soundcloud.prototype.dispose = function() {
   if (this.scWidgetElement) {
     this.scWidgetElement.parentNode.removeChild(this.scWidgetElement);
     console.debug("Removed widget Element");
+    delete this.scWidgetElement;
     console.debug(this.scWidgetElement);
   }
   console.debug("removed CSS");
@@ -138,9 +129,10 @@ Soundcloud.prototype.src = function(src) {
     callback: (function(_this) {
       return function() {
         _this.soundcloudSource = src;
-        _this.onReady();
-        console.debug("trigger 'newSource' from " + src);
-        return _this.player_.trigger("newSource");
+        if (!_this.ready_) {
+          _this.onReady();
+        }
+        return _this.trigger("loadstart");
       };
     })(this)
   });
@@ -150,23 +142,35 @@ Soundcloud.prototype.currentSrc = function() {
   return this.src();
 };
 
+
+/*
+A getter for the poster
+ */
+
+Soundcloud.prototype.poster = function() {
+  return this.poster_;
+};
+
+
+/*
+Grabs the poster from soundcloud
+ASYNC
+ */
+
 Soundcloud.prototype.updatePoster = function() {
   var e, error;
   try {
-    return this.soundcloudPlayer.getSounds((function(_this) {
-      return function(sounds) {
-        var posterUrl, sound;
-        console.debug("got sounds");
-        if (sounds.length !== 1) {
-          return;
-        }
-        sound = sounds[0];
-        if (!sound.artwork_url) {
+    return this.soundcloudPlayer.getCurrentSound((function(_this) {
+      return function(sound) {
+        var posterUrl;
+        console.debug("got sound", sound);
+        if (!(sound && sound.artwork_url)) {
           return;
         }
         posterUrl = sound.artwork_url.replace("large.jpg", "t500x500.jpg");
         console.debug("Setting poster to " + posterUrl);
-        return _this.player_.el().style.backgroundImage = "url('" + posterUrl + "')";
+        _this.poster_ = posterUrl;
+        return _this.trigger("posterchange");
       };
     })(this));
   } catch (error) {
@@ -338,8 +342,12 @@ Soundcloud.prototype.loadSoundcloud = function() {
   var checkSoundcloudApiReady;
   console.debug("loadSoundcloud");
   if (Soundcloud.apiReady && !this.soundcloudPlayer) {
-    console.debug("simply initializing the widget");
-    return this.initWidget();
+    return setTimeout((function(_this) {
+      return function() {
+        console.debug("simply initializing the widget");
+        return _this.initWidget();
+      };
+    })(this), 1);
   } else {
     if (!Soundcloud.apiLoading) {
       console.debug("loading soundcloud api");
@@ -369,7 +377,7 @@ and which will react to events.
 
 Soundcloud.prototype.initWidget = function() {
   console.debug("Initializing the widget");
-  this.soundcloudPlayer = SC.Widget(this.scWidgetId);
+  this.soundcloudPlayer = SC.Widget(this.el_);
   console.debug("created widget");
   this.soundcloudPlayer.bind(SC.Widget.Events.READY, (function(_this) {
     return function() {
@@ -424,7 +432,7 @@ Callback for soundcloud's READY event.
  */
 
 Soundcloud.prototype.onReady = function() {
-  var e, error, error1;
+  var e, error;
   console.debug("onReady");
   this.soundcloudPlayer.getVolume((function(_this) {
     return function(volume) {
@@ -446,16 +454,8 @@ Soundcloud.prototype.onReady = function() {
     console.debug("could not get the duration");
   }
   this.updatePoster();
-  this.triggerReady();
-  try {
-    if (this.playOnReady) {
-      this.soundcloudPlayer.play();
-    }
-  } catch (error1) {
-    e = error1;
-    console.debug("could not play onready");
-  }
-  return console.debug("finished onReady");
+  console.log("finished onReady");
+  return this.triggerReady();
 };
 
 
@@ -556,7 +556,7 @@ SoundcloudSourceHandler = (function() {
   function SoundcloudSourceHandler() {}
 
   SoundcloudSourceHandler.isSoundcloudUrl = function(url) {
-    return /^(https?:\/\/)?(www.)?soundcloud.com\/./i.test(url);
+    return /^(https?:\/\/)?(www.|api.)?soundcloud.com\/./i.test(url);
   };
 
   SoundcloudSourceHandler.canPlayType = function(type) {
@@ -579,7 +579,7 @@ SoundcloudSourceHandler = (function() {
 
   SoundcloudSourceHandler.canPlaySource = function(source, options) {
     var ret;
-    ret = this.canPlayType(source.type) && this.isSoundcloudUrl(source.src) ? "probably" : '';
+    ret = this.canPlayType(source.type) || this.isSoundcloudUrl(source.src || source) ? "probably" : '';
     console.debug("Can play source?", source, ret);
     return ret;
   };
@@ -589,7 +589,8 @@ SoundcloudSourceHandler = (function() {
   };
 
   SoundcloudSourceHandler.handleSource = function(source, tech, options) {
-    return tech.src(source.src);
+    tech.src(source.src);
+    return this;
   };
 
   return SoundcloudSourceHandler;

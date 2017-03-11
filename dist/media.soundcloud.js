@@ -1,4 +1,4 @@
-/*! video.js-soundcloud v1.0.1_07-03-2017 */
+/*! video.js-soundcloud v2.0.0-unstable_11-03-2017 */
 var Soundcloud, SoundcloudSourceHandler, Tech, addScriptTag, extend = function(a, b) {
     function c() {
         this.constructor = a;
@@ -17,50 +17,49 @@ addScriptTag = function(a) {
     function b(a, c) {
         b.__super__.constructor.call(this, a, c), this.volumeVal = 0, this.durationMilliseconds = 1, 
         this.currentPositionSeconds = 0, this.loadPercentageDecimal = 0, this.paused_ = !0, 
-        this.soundcloudSource = null, "string" == typeof a.source ? this.soundcloudSource = a.source : "object" == typeof a.source && (this.soundcloudSource = a.source.src), 
-        this.options().autoplay && (this.playOnReady = !0), this.ready(function(a) {
+        this.poster_ = null, this.soundcloudSource = null, "string" == typeof a.source ? this.soundcloudSource = a.source : "object" == typeof a.source && (this.soundcloudSource = a.source.src), 
+        this.ready(function(a) {
             return function() {
                 return a.trigger("loadstart");
             };
-        }(this)), this.loadSoundcloud();
+        }(this)), this.scWidgetElement.id = this.scWidgetId = "soundcloud_api_" + Date.now(), 
+        this.scWidgetElement.src = "" + b.URL_PREFIX + this.soundcloudSource, this.loadSoundcloud();
     }
-    return extend(b, a), b.prototype._getWidgetId = function() {
-        return this.scWidgetId ? this.scWidgetId : this.scWidgetId = this.id() + "_soundcloud_api_" + Date.now();
-    }, b.prototype.createEl = function() {
-        return this.scWidgetElement || (this.scWidgetElement = b.__super__.createEl.call(this, "iframe", {
-            id: this._getWidgetId(),
+    return extend(b, a), b.URL_PREFIX = "https://w.soundcloud.com/player/?url=", b.prototype.createEl = function() {
+        return this.scWidgetElement = b.__super__.createEl.call(this, "iframe", {
             scrolling: "no",
             marginWidth: 0,
             marginHeight: 0,
             frameBorder: 0,
             webkitAllowFullScreen: "true",
             mozallowfullscreen: "true",
-            allowFullScreen: "true",
-            src: "https://w.soundcloud.com/player/?url=" + this.soundcloudSource
-        }), this.scWidgetElement.style.visibility = "hidden"), this.scWidgetElement;
+            allowFullScreen: "true"
+        }), this.scWidgetElement.style.visibility = "hidden", this.scWidgetElement;
     }, b;
 }(Tech), Soundcloud.prototype.dispose = function() {
-    if (this.scWidgetElement && this.scWidgetElement.parentNode.removeChild(this.scWidgetElement), 
-    this.soundcloudPlayer) return delete this.soundcloudPlayer;
+    if (this.scWidgetElement && (this.scWidgetElement.parentNode.removeChild(this.scWidgetElement), 
+    delete this.scWidgetElement), this.soundcloudPlayer) return delete this.soundcloudPlayer;
 }, Soundcloud.prototype.load = function() {
     return this.loadSoundcloud();
 }, Soundcloud.prototype.src = function(a) {
     return a ? this.soundcloudPlayer.load(a, {
         callback: function(b) {
             return function() {
-                return b.soundcloudSource = a, b.onReady(), b.player_.trigger("newSource");
+                return b.soundcloudSource = a, b.ready_ || b.onReady(), b.trigger("loadstart");
             };
         }(this)
     }) : this.soundcloudSource;
 }, Soundcloud.prototype.currentSrc = function() {
     return this.src();
+}, Soundcloud.prototype.poster = function() {
+    return this.poster_;
 }, Soundcloud.prototype.updatePoster = function() {
     try {
-        return this.soundcloudPlayer.getSounds(function(a) {
+        return this.soundcloudPlayer.getCurrentSound(function(a) {
             return function(b) {
-                var c, d;
-                if (1 === b.length && (d = b[0], d.artwork_url)) return c = d.artwork_url.replace("large.jpg", "t500x500.jpg"), 
-                a.player_.el().style.backgroundImage = "url('" + c + "')";
+                var c;
+                if (b && b.artwork_url) return c = b.artwork_url.replace("large.jpg", "t500x500.jpg"), 
+                a.poster_ = c, a.trigger("posterchange");
             };
         }(this));
     } catch (a) {
@@ -102,7 +101,11 @@ addScriptTag = function(a) {
     return this.scWidgetElement.webkitExitFullScreen();
 }, Soundcloud.prototype.loadSoundcloud = function() {
     var a;
-    return Soundcloud.apiReady && !this.soundcloudPlayer ? this.initWidget() : Soundcloud.apiLoading ? void 0 : (a = function(a) {
+    return Soundcloud.apiReady && !this.soundcloudPlayer ? setTimeout(function(a) {
+        return function() {
+            return a.initWidget();
+        };
+    }(this), 1) : Soundcloud.apiLoading ? void 0 : (a = function(a) {
         return function() {
             if (void 0 !== window.SC) return Soundcloud.apiReady = !0, window.clearInterval(Soundcloud.intervalId), 
             void a.initWidget();
@@ -110,7 +113,7 @@ addScriptTag = function(a) {
     }(this), addScriptTag("http://w.soundcloud.com/player/api.js"), Soundcloud.apiLoading = !0, 
     Soundcloud.intervalId = window.setInterval(a, 10));
 }, Soundcloud.prototype.initWidget = function() {
-    if (this.soundcloudPlayer = SC.Widget(this.scWidgetId), this.soundcloudPlayer.bind(SC.Widget.Events.READY, function(a) {
+    if (this.soundcloudPlayer = SC.Widget(this.el_), this.soundcloudPlayer.bind(SC.Widget.Events.READY, function(a) {
         return function() {
             return a.onReady();
         };
@@ -158,12 +161,7 @@ addScriptTag = function(a) {
     } catch (a) {
         a;
     }
-    this.updatePoster(), this.triggerReady();
-    try {
-        this.playOnReady && this.soundcloudPlayer.play();
-    } catch (a) {
-        a;
-    }
+    return this.updatePoster(), this.triggerReady();
 }, Soundcloud.prototype.onPlayProgress = function(a) {
     return this.currentPositionSeconds = this.durationMilliseconds * a / 1e3, this.player_.trigger("playing");
 }, Soundcloud.prototype.onLoadProgress = function(a) {
@@ -182,15 +180,15 @@ addScriptTag = function(a) {
 SoundcloudSourceHandler = function() {
     function a() {}
     return a.isSoundcloudUrl = function(a) {
-        return /^(https?:\/\/)?(www.)?soundcloud.com\/./i.test(a);
+        return /^(https?:\/\/)?(www.|api.)?soundcloud.com\/./i.test(a);
     }, a.canPlayType = function(a) {
         return "audio/soundcloud" === a ? "probably" : "";
     }, a.canPlaySource = function(a, b) {
-        return this.canPlayType(a.type) && this.isSoundcloudUrl(a.src) ? "probably" : "";
+        return this.canPlayType(a.type) || this.isSoundcloudUrl(a.src || a) ? "probably" : "";
     }, a.canHandleSource = function(a, b) {
         return this.canPlaySource(a, b);
     }, a.handleSource = function(a, b, c) {
-        return b.src(a.src);
+        return b.src(a.src), this;
     }, a;
 }(), Tech.withSourceHandlers(Soundcloud), Soundcloud.registerSourceHandler(SoundcloudSourceHandler), 
 Tech.registerTech("Soundcloud", Soundcloud);
