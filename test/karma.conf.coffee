@@ -9,9 +9,8 @@ module.exports = (config) ->
       else
           [
             "Chrome"
+            "Chromium"
             "Firefox"
-            # TODO Opera?
-#            "Opera"
           ]
   config.set
 
