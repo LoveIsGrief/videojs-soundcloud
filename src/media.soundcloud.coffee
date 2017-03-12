@@ -80,7 +80,6 @@ Soundcloud::dispose = ->
 		@scWidgetElement.parentNode.removeChild @scWidgetElement
 		console.debug "Removed widget Element"
 		delete @scWidgetElement
-		console.debug @scWidgetElement
 	console.debug "removed CSS"
 	delete @soundcloudPlayer if @soundcloudPlayer
 
@@ -354,7 +353,7 @@ Soundcloud::onReady = ->
 	#@soundcloudPlayer.play()
 	#@soundcloudPlayer.pause()
 
-	console.log "finished onReady"
+	console.debug "finished onReady"
 	@triggerReady()
 
 
