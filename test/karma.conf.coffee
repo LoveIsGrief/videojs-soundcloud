@@ -8,8 +8,8 @@ module.exports = (config) ->
 		process.env["BROWSERS"].split(":")
 	else
 		[
-            "Chrome"
-            "Chromium"
+			"Chrome"
+			"Chromium"
 			"Firefox"
 		]
 	config.set
