@@ -3,9 +3,6 @@ Documentation can be generated using {https://github.com/coffeedoc/codo Codo}
 ###
 Tech = window.videojs.getComponent("Tech")
 
-if not window.DEBUG and window.console
-	window.console.debug = ->
-
 ###
 Add a script to head with the given @scriptUrl
 ###
@@ -143,7 +140,13 @@ Soundcloud::play = ->
 	else
 		console.debug "to play on ready"
 		# We will play it when the API will be ready
-		@playOnReady = true
+		@setAutoplay true
+
+Soundcloud::autoplay = ->
+		@options_.autoplay
+
+Soundcloud::setAutoplay = (value)->
+		@options_.autoplay = true
 
 ###
 Toggle the playstate between playing and paused
@@ -362,7 +365,7 @@ It should keep track of how much has been played.
 @param {Decimal= playPercentageDecimal} [0...1] How much has been played  of the sound in decimal from [0...1]
 ###
 Soundcloud::onPlayProgress = (playPercentageDecimal)->
-	console.debug "onPlayProgress"
+	console.debug "onPlayProgress", playPercentageDecimal
 	@currentPositionSeconds = @durationMilliseconds * playPercentageDecimal / 1000
 	@player_.trigger "playing"
 
