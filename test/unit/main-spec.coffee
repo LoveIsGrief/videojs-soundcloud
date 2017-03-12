@@ -153,6 +153,7 @@ describe "videojs-soundcloud plugin", ->
 
 		beforeEach ->
 			console.debug "beforeEach with video and source tag"
+			@source = "https://soundcloud.com/hipster-online/04-sweet-home-alabama"
 			@vFromScript = window.__html__['test/ressources/videojs_from_script.html']
 			document.body.innerHTML = @vFromScript
 			expect(document.getElementById @videoTagId).not.toBeNull()
@@ -187,6 +188,7 @@ describe "videojs-soundcloud plugin", ->
 
 		beforeEach ->
 			console.debug "beforeEach with video and source tag"
+			@source = "https://soundcloud.com/oshi/kali-uchi"
 			@vFromScript = window.__html__['test/ressources/videojs_from_script.html']
 			document.body.innerHTML = @vFromScript
 			expect(document.getElementById @videoTagId).not.toBeNull()
@@ -218,6 +220,7 @@ describe "videojs-soundcloud plugin", ->
 
 		beforeEach ->
 			console.debug "beforeEach with no source tag"
+			@source = "https://soundcloud.com/monstercat/pegboard-nerds-self-destruct"
 			@vFromScript = window.__html__['test/ressources/videojs_from_script.html']
 			document.body.innerHTML = @vFromScript
 			expect(document.getElementById @videoTagId).not.toBeNull()
