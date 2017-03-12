@@ -1,10 +1,10 @@
 dist: trusty
 language: node_js
 node_js:
-#    - "0.11"
-#    - "0.10"
-#    - "4"
-#    - "5"
+    - "0.11"
+    - "0.10"
+    - "4"
+    - "5"
     - "6"
 
 addons:
@@ -16,13 +16,10 @@ before_install:
     # apt-add-repository is in there
     - sudo apt-get install -y python-software-properties
     # Add repos
-#    - sudo apt-add-repository "deb http://deb.opera.com/opera/ stable non-free"
     - sudo apt-add-repository "deb http://dl.google.com/linux/chrome/deb/ stable main"
     # Remove "deb-src" repos added from apt-add-repository, because it doesn't exist online
-#    - sudo sed -i s/deb-src.*opera.*//g /etc/apt/sources.list
     - sudo sed -i s/deb-src.*google.*//g /etc/apt/sources.list
     # Add apt-keys for checking the packages
-#    - wget -O - http://deb.opera.com/archive.key | sudo apt-key add -
     - wget -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
     - sudo apt-get update -qq
     # Install the browsers
