@@ -7,4 +7,7 @@ npm-debug.log
 # IDEs
 .idea
 
+# Vagrant
+.vagrant
+
 index.html
