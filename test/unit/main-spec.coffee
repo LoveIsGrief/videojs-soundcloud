@@ -10,6 +10,7 @@ spyOnAllClassFunctions = (o)->
 videojs = window.videojs
 
 describe "videojs-soundcloud plugin", ->
+#	window.DEBUG = true
 
 	################################
 	#   Reusable tests
@@ -19,7 +20,7 @@ describe "videojs-soundcloud plugin", ->
 		@player.ready =>
 			iframe = document.getElementsByTagName("iframe")[0]
 			expect(iframe).toBeTruthy()
-			expect(iframe.src).toEqual "https://w.soundcloud.com/player/?url=#{@source}"
+			expect(iframe.src).toMatch ///w.soundcloud.com/player/\?url=#{@source}$///
 			done()
 
 	# Test if calling play() works
@@ -166,7 +167,7 @@ describe "videojs-soundcloud plugin", ->
 			@player.ready =>
 					iframe = document.getElementsByTagName("iframe")[0]
 					expect(iframe).toBeTruthy()
-					expect(iframe.src).toEqual "https://w.soundcloud.com/player/?url=#{@source}"
+					expect(iframe.src).toMatch ///w.soundcloud.com/player/\?url=#{@source}$///
 					done()
 
 		it "should play the song", playTest
