@@ -71,6 +71,7 @@ class Soundcloud extends Tech
 				mozallowfullscreen: "true"
 				allowFullScreen: "true"
 		@scWidgetElement.style.visibility = "hidden"
+		@scWidgetElement.style.display = "none"
 		@scWidgetElement
 #@player_.el().classList.add "backgroundContainer"
 
