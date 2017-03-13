@@ -1,11 +1,15 @@
 node_modules
-bower_components
-
-# compiled files
-example/*.html
 
 #npm stuff
 npm-debug.log
 
 # IDEs
 .idea
+
+/bower_components/*
+!/bower_components/video.js
+
+/bower_components/video.js/*
+!/bower_components/video.js/dist
+/bower_components/video.js/dist/*.zip
+/bower_components/video.js/dist/examples

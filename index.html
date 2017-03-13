@@ -1,0 +1,20 @@
+<html><head><link href="bower_components/video.js/dist/video-js.css" rel="stylesheet"/><script src="bower_components/video.js/dist/video.js"></script><script src="dist/media.soundcloud.dev.js"></script><style>#myAudio {
+	width: 100%;
+	height: 360px;
+}
+
+</style><script src="http://localhost:35729/livereload.js"></script><script>function updateSource(){
+	source = document.getElementById("source").value
+	console.debug("Setting new source: " + source);
+	videojs("myAudio", {
+			techOrder: ["Soundcloud"],
+		// "sources": [source],
+		}, function(){}
+	).src({
+		src: source,
+		type: "audio/soundcloud"
+	});
+
+}
+window.addEventListener("load", updateSource)
+</script><title>videojs-souncloud test</title></head><body><h1>videojs-souncloud example</h1><form onsubmit="updateSource();return false" method="post"><input id="source" type="text" value="https://soundcloud.com/vaughan-1-1/this-is-what-crazy-looks-like"/><input type="submit" value="Submit"/></form><video class="video-js vjs-default-skin" id="myAudio" controls="controls"></video></body></html>
