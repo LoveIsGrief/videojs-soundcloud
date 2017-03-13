@@ -18,7 +18,7 @@ addScriptTag = (scriptUrl)->
 
 class Soundcloud extends Tech
 
-	@URL_PREFIX = "https://w.soundcloud.com/player/?url="
+	@URL_PREFIX = "//w.soundcloud.com/player/?url="
 
 	###
 	Soundcloud Tech - Wrapper for Soundcloud Media API
@@ -279,7 +279,7 @@ Soundcloud::loadSoundcloud = ->
 					window.clearInterval Soundcloud.intervalId
 					@initWidget()
 					console.debug "cleared interval"
-			addScriptTag "https://w.soundcloud.com/player/api.js"
+			addScriptTag "//w.soundcloud.com/player/api.js"
 			Soundcloud.apiLoading = true
 			Soundcloud.intervalId = window.setInterval checkSoundcloudApiReady, 10
 
