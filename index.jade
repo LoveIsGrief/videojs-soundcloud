@@ -2,9 +2,17 @@ html
 	head
 
 		//- !-- Mandatory videojs include! --
-		link(href="../bower_components/video.js/dist/video-js.css" rel="stylesheet")
-		script(src="../bower_components/video.js/dist/video.js")
-		script(src="../dist/media.soundcloud.dev.js")
+		link(href="bower_components/video.js/dist/video-js.css" rel="stylesheet")
+		script(src="bower_components/video.js/dist/video.js")
+		script(src="dist/media.soundcloud.dev.js")
+
+
+		style.
+			#myAudio {
+				width: 100%;
+				height: 360px;
+			}
+
 
 		//- To make livereload work
 		script(src="http://localhost:35729/livereload.js")
@@ -47,6 +55,4 @@ html
 		video#myAudio(
 			class="video-js vjs-default-skin"
 			controls
-			width="100%"
-			height="360"
 			)

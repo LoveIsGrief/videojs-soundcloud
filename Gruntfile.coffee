@@ -58,7 +58,7 @@ module.exports = (grunt) ->
 		pug:
 			compile:
 				files:
-					"example/index.html": "example/index.jade"
+					"index.html": "index.jade"
 
 		karma:
 			options:

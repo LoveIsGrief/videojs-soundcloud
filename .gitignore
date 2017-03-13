@@ -1,11 +1,10 @@
 node_modules
 bower_components
 
-# compiled files
-example/*.html
-
 #npm stuff
 npm-debug.log
 
 # IDEs
 .idea
+
+index.html
