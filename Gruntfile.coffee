@@ -67,6 +67,7 @@ module.exports = (grunt) ->
 			watch: {}
 			single:
 				singleRun: true
+				logLevel: "DEBUG"
 
 			# Test the compiled and uglified lib
 			singleProduction:
