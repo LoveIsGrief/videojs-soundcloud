@@ -111,7 +111,7 @@ addScriptTag = function(a) {
             if (void 0 !== window.SC) return Soundcloud.apiReady = !0, window.clearInterval(Soundcloud.intervalId), 
             void a.initWidget();
         };
-    }(this), addScriptTag("http://w.soundcloud.com/player/api.js"), Soundcloud.apiLoading = !0, 
+    }(this), addScriptTag("https://w.soundcloud.com/player/api.js"), Soundcloud.apiLoading = !0, 
     Soundcloud.intervalId = window.setInterval(a, 10));
 }, Soundcloud.prototype.initWidget = function() {
     if (this.soundcloudPlayer = SC.Widget(this.el_), this.soundcloudPlayer.bind(SC.Widget.Events.READY, function(a) {

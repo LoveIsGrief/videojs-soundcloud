@@ -362,7 +362,7 @@ Soundcloud.prototype.loadSoundcloud = function() {
           }
         };
       })(this);
-      addScriptTag("http://w.soundcloud.com/player/api.js");
+      addScriptTag("https://w.soundcloud.com/player/api.js");
       Soundcloud.apiLoading = true;
       return Soundcloud.intervalId = window.setInterval(checkSoundcloudApiReady, 10);
     }
