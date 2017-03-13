@@ -1,3 +1,4 @@
+# TODO consider using load-config
 module.exports = (grunt) ->
 	grunt.initConfig
 		pkg: grunt.file.readJSON "package.json"
@@ -43,7 +44,7 @@ module.exports = (grunt) ->
 
 		watch:
 			sources:
-				files: ["src/*.coffee", "example/*.jade"]
+				files: ["src/*.coffee", "example/*.jade "]
 				tasks: ["compile", "example"]
 				options: livereload: true
 
@@ -54,7 +55,7 @@ module.exports = (grunt) ->
 				files:
 					"dist/media.soundcloud.dev.js": "src/media.soundcloud.coffee"
 
-		jade:
+		pug:
 			compile:
 				files:
 					"example/index.html": "example/index.jade"
@@ -102,7 +103,7 @@ module.exports = (grunt) ->
 	grunt.loadNpmTasks "grunt-contrib-uglify"
 	grunt.loadNpmTasks "grunt-contrib-watch"
 	grunt.loadNpmTasks "grunt-contrib-concat"
-	grunt.loadNpmTasks "grunt-contrib-jade"
+	grunt.loadNpmTasks "grunt-contrib-pug"
 	grunt.loadNpmTasks "grunt-karma"
 
 	#
@@ -114,7 +115,7 @@ module.exports = (grunt) ->
 
 	# Make the example/index.html usable
 	grunt.registerTask "example", [
-					"jade"
+#					"pug"
 					"compile"
 				]
 
