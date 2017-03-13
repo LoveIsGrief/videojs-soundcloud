@@ -115,7 +115,7 @@ module.exports = (grunt) ->
 
 	# Make the example/index.html usable
 	grunt.registerTask "example", [
-#					"pug"
+					"pug"
 					"compile"
 				]
 
@@ -128,6 +128,6 @@ module.exports = (grunt) ->
 
 	#
 	grunt.registerTask "default", [
-					"coffee_jshint"
+					"example"
 					"test"
 				]
