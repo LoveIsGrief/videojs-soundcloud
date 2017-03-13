@@ -1,4 +1,4 @@
-/*! video.js-soundcloud v2.0.0-unstable_11-03-2017 */
+/*! video.js-soundcloud v2.0.0-unstable_13-03-2017 */
 var Soundcloud, SoundcloudSourceHandler, Tech, addScriptTag, extend = function(a, b) {
     function c() {
         this.constructor = a;
@@ -34,7 +34,8 @@ addScriptTag = function(a) {
             webkitAllowFullScreen: "true",
             mozallowfullscreen: "true",
             allowFullScreen: "true"
-        }), this.scWidgetElement.style.visibility = "hidden", this.scWidgetElement;
+        }), this.scWidgetElement.style.visibility = "hidden", this.scWidgetElement.style.display = "none", 
+        this.scWidgetElement;
     }, b;
 }(Tech), Soundcloud.prototype.dispose = function() {
     if (this.scWidgetElement && (this.scWidgetElement.parentNode.removeChild(this.scWidgetElement), 

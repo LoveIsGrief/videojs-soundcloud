@@ -80,6 +80,7 @@ Soundcloud = (function(superClass) {
       allowFullScreen: "true"
     });
     this.scWidgetElement.style.visibility = "hidden";
+    this.scWidgetElement.style.display = "none";
     return this.scWidgetElement;
   };
 
@@ -98,7 +99,6 @@ Soundcloud.prototype.dispose = function() {
     this.scWidgetElement.parentNode.removeChild(this.scWidgetElement);
     console.debug("Removed widget Element");
     delete this.scWidgetElement;
-    console.debug(this.scWidgetElement);
   }
   console.debug("removed CSS");
   if (this.soundcloudPlayer) {
@@ -454,7 +454,7 @@ Soundcloud.prototype.onReady = function() {
     console.debug("could not get the duration");
   }
   this.updatePoster();
-  console.log("finished onReady");
+  console.debug("finished onReady");
   return this.triggerReady();
 };
 
