@@ -60,33 +60,3 @@ install_xvfb(){
 install_nvm
 install_latest_firefox
 install_xvfb
-
-# The actual "before_install" part of the .travis.yml
-# Do NOT execute this twice!
-# Some of these commands shouldn't be run twice!
-
-#sudo apt-get update -qq
-## Install the requirements for adding repos
-## apt-add-repository is in there
-#sudo apt-get install -y python-software-properties
-## Add repos
-## sudo apt-add-repository "deb http://deb.opera.com/opera/ stable non-free"
-#if ! grep "dl.google.com" /etc/apt/sources.list /etc/apt/sources.list.d/* ; then
-#    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chome.list
-#fi
-## Remove "deb-src" repos added from apt-add-repository, because it doesn't exist online
-#sudo sed -i s/deb-src.*opera.*//g /etc/apt/sources.list
-#sudo sed -i s/deb-src.*google.*//g /etc/apt/sources.list
-## Add apt-keys for checking the packages
-#wget -O - http://deb.opera.com/archive.key | sudo apt-key add -
-#wget -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-#sudo apt-get update -qq
-## Install the browsers
-#sudo apt-get install -y chromium-browser google-chrome-stable xvfb
-## Install what's needed to play mp4s with firefox
-#sudo apt-get install libavcodec-extra
-## Install grunt and bower globally
-#npm install -g grunt-cli bower
-# Setup xvfb for browsers
-#export DISPLAY=:99.0
-#sh -e /etc/init.d/xvfb start
