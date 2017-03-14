@@ -6,8 +6,10 @@ INITIAL_NODE_VERSION=6
 install_nvm(){
     if ! grep nvm ~/.profile ; then
         wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+	export NVM_DIR="$HOME/.nvm"
+	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
         # Install a basic node version
-        npm install ${INITIAL_NODE_VERSION}
+        nvm install ${INITIAL_NODE_VERSION}
     fi
     # Make sure we can execute project local commands
     if ! grep node_modules ~/.bashrc ; then
