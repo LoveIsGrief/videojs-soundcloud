@@ -14,23 +14,19 @@ before_install:
     - sudo apt-get update -qq
     # Install the requirements for adding repos
     # apt-add-repository is in there
-    - sudo apt-get install -y python-software-properties
+    - sudo apt-get install -qy python-software-properties
     # Add repos
-    - sudo apt-add-repository "deb http://dl.google.com/linux/chrome/deb/ stable main"
-    # Remove "deb-src" repos added from apt-add-repository, because it doesn't exist online
-    - sudo sed -i s/deb-src.*google.*//g /etc/apt/sources.list
+    - echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
     # Add apt-keys for checking the packages
     - wget -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
     - sudo apt-get update -qq
     # Install the browsers
-    - sudo apt-get install -y chromium-browser google-chrome-stable
+    - sudo apt-get install -qy chromium-browser google-chrome-stable
     # Setup xvfb for browsers
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
-    # Install grunt and bower globally
-    - npm install -g grunt-cli bower
     # Install what's needed to play mp4s and audio with firefox
-    - sudo apt-get install -y ubuntu-restricted-addons pulseaudio
+    - sudo apt-get install -qy ubuntu-restricted-addons pulseaudio
     # Configure pulseaudio to run properly
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1214809
     - pulseaudio --start --daemonize --fail
