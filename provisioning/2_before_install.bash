@@ -24,7 +24,7 @@ sed  -n `#Control output`\
      -e 's/^\s*#/#/' `# Remove comment lines indents`\
      -e 's/^\s*-\s*//' `# Remove the YAML list tokens`\
      -e p `# Print out the modified line`\
-     /vagrant/.travis.yml | tee "${OUTPUT_FILE}"
+     /vagrant/.travis.yml | tee -a "${OUTPUT_FILE}"
 
 chmod u+x "${OUTPUT_FILE}"
 exec "${OUTPUT_FILE}"
