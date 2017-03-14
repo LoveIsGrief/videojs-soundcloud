@@ -47,7 +47,7 @@ install_latest_firefox(){
 install_xvfb(){
     if ! which Xvfb ; then
         echo "installing xvfb"
-        sudo apt-get install Xvfb -y
+        sudo apt-get install Xvfb -qy
 
         echo "Make the xvfb service as it exists on a travis machine"
         sudo cp /vagrant/provisioning/files/xvfb.service.bash /etc/init.d/xvfb
